@@ -9,7 +9,12 @@ export function Folder({ files, setFiles }) {
   const [idInput, setIdInput] = useState(null);
   //set text input
   const [textInput, setInput] = useState("");
-
+  //
+  const fileIcon = {
+    html: <i className="fa fa-html5"></i>,
+    css: <i className="fa fa-css3"></i>,
+    txt: <i className="fa fa-file-text"></i>,
+  };
   //function for add folder root
   function handelFolder() {
     setNumber(number + 1);
@@ -74,24 +79,10 @@ export function Folder({ files, setFiles }) {
             </li>
             <ul>
               {folder.children.map((item) => (
-                <>
-                  {item.name.split(".")[1].toLowerCase() === "html" && (
-                    <li>
-                      <i className="fa fa-html5">{" " + item.name}</i>
-                    </li>
-                  )}
-
-                  {item.name.split(".")[1].toLowerCase() === "txt" && (
-                    <li>
-                      <i className="fa fa-file-text">{" " + item.name}</i>
-                    </li>
-                  )}
-                  {item.name.split(".")[1].toLowerCase() === "css" && (
-                    <li>
-                      <i className="fa fa-css3">{" " + item.name}</i>
-                    </li>
-                  )}
-                </>
+                <li>
+                  {fileIcon[item.name.split(".")[1].toLowerCase()] ?? null}
+                  {item.name}
+                </li>
               ))}
             </ul>
 
