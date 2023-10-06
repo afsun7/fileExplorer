@@ -75,12 +75,10 @@ export function Folder({ files, setFiles }) {
             <ul>
               {folder.children.map((item) => (
                 <>
-                  {item.name.split(".")[1].toLowerCase() === "html" ? (
+                  {item.name.split(".")[1].toLowerCase() === "html" && (
                     <li>
                       <i className="fa fa-html5">{" " + item.name}</i>
                     </li>
-                  ) : (
-                    <li>{item.name}</li>
                   )}
 
                   {item.name.split(".")[1].toLowerCase() === "txt" && (
