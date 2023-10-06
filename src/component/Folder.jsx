@@ -53,11 +53,15 @@ export function Folder({ files, setFiles }) {
           children: [],
         };
 
-        const child = files.find((item) => {
-          if (item.id === idInput)
+        files.find((item) => {
+          if (item.id === idInput) {
+            for (const node of item.children) {
+              if (node.name === textInput) return false;
+            }
             return (item.children = [...item.children, file]);
+          }
         });
-        console.log(child);
+
         setFiles([...files]);
         e.target.value = "";
       }
@@ -81,7 +85,7 @@ export function Folder({ files, setFiles }) {
               {folder.children.map((item) => (
                 <li>
                   {fileIcon[item.name.split(".")[1].toLowerCase()] ?? null}
-                  {item.name}
+                  {" " + item.name}
                 </li>
               ))}
             </ul>
