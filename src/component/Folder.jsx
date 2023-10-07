@@ -7,9 +7,12 @@ export function Folder({ files, setFiles }) {
   const [id, setId] = useState(0);
   //input for add file
   const [idInput, setIdInput] = useState(null);
+  //input for add folder
+  const [textFolderInput, setTextFolderInput] = useState("");
   //set text input
   const [textInput, setInput] = useState("");
-  //
+  //show input for add subfolder
+  const [subFolder, setSubFolder] = useState(false);
   const fileIcon = {
     html: <i className="fa fa-html5"></i>,
     css: <i className="fa fa-css3"></i>,
@@ -49,7 +52,7 @@ export function Folder({ files, setFiles }) {
       if (textInput !== "") {
         const file = {
           name: textInput,
-          show: false,
+          type: "file",
           id: Math.floor(Math.random() * 1000),
           children: [],
         };
@@ -82,6 +85,38 @@ export function Folder({ files, setFiles }) {
     setFiles([...files]);
   }
 
+  //function add subFolder
+  function handelAddFolder(iD) {
+    setIdInput(iD);
+    setSubFolder(true);
+  }
+  //function input for subFolder
+  function handelFolderInput(e) {
+    setTextFolderInput(e.target.value);
+    if (e.key === "Enter") {
+      if (textFolderInput !== "") {
+        const subFolder = {
+          name: textFolderInput,
+          type: "folder",
+          id: Math.floor(Math.random() * 1000),
+          children: [],
+        };
+
+        files.find((item) => {
+          if (item.id === idInput) {
+            for (const node of item.children) {
+              if (node.name === textFolderInput) return false;
+            }
+            return (item.children = [...item.children, subFolder]);
+          }
+        });
+
+        setFiles([...files]);
+        e.target.value = "";
+      }
+      console.log(files);
+    }
+  }
   return (
     <>
       <button onClick={handelFolder}>
@@ -107,11 +142,20 @@ export function Folder({ files, setFiles }) {
                       style={{ display: "flex", alignItems: "baseline" }}
                       key={file.id}
                     >
-                      <li>
-                        {fileIcon[file.name.split(".")[1].toLowerCase()] ??
-                          null}
-                        {" " + file.name}
-                      </li>
+                      {file.type === "file" ? (
+                        <li>
+                          {fileIcon[file.name.split(".")[1].toLowerCase()] ??
+                            null}
+                          {" " + file.name}
+                        </li>
+                      ) : (
+                        <>
+                          <li>
+                            <i className="fa fa-folder"></i>
+                            {" "+file.name}
+                          </li>
+                        </>
+                      )}
                       <i
                         className="fa fa-trash icon"
                         style={{ marginLeft: "10px" }}
@@ -125,11 +169,20 @@ export function Folder({ files, setFiles }) {
 
             {idInput === folder.id ? (
               <div className="enterFile">
-                <input
-                  type="text"
-                  onKeyUp={handelInput}
-                  placeholder="file name"
-                />
+                {subFolder ? (
+                  <input
+                    type="text"
+                    placeholder="folder name"
+                    onKeyUp={handelFolderInput}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    onKeyUp={handelInput}
+                    placeholder="file name"
+                  />
+                )}
+
                 <i class="material-icons" onClick={() => setIdInput(null)}>
                   cancel
                 </i>
@@ -141,7 +194,10 @@ export function Folder({ files, setFiles }) {
                     className="fa fa-file icon"
                     onClick={() => setIdInput(folder.id)}
                   ></i>
-                  <i className="fa fa-folder icon"></i>
+                  <i
+                    className="fa fa-folder icon"
+                    onClick={() => handelAddFolder(folder.id)}
+                  ></i>
                   <i className="fa fa-trash icon" onClick={handelDelete}></i>
                 </div>
               )
