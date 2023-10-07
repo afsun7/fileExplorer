@@ -49,6 +49,7 @@ export function Folder({ files, setFiles }) {
       if (textInput !== "") {
         const file = {
           name: textInput,
+          show: false,
           id: Math.floor(Math.random() * 1000),
           children: [],
         };
@@ -90,26 +91,36 @@ export function Folder({ files, setFiles }) {
         {files.map((folder) => (
           <div className="folder">
             <li onClick={() => handelShowIcon(folder.id)} key={folder.id}>
-              <i className="fa fa-folder"></i>
+              {folder.show ? (
+                <i class="fa fa-folder-open"></i>
+              ) : (
+                <i className="fa fa-folder"></i>
+              )}
+
               {" " + folder.name}
             </li>
             <ul>
-              {folder.children.map((file) => (
-                <div
-                  style={{ display: "flex", alignItems: "baseline" }}
-                  key={file.id}
-                >
-                  <li>
-                    {fileIcon[file.name.split(".")[1].toLowerCase()] ?? null}
-                    {" " + file.name}
-                  </li>
-                  <i
-                    className="fa fa-trash icon"
-                    style={{ marginLeft: "10px" }}
-                    onClick={() => handelDeleteFile(file.id, folder.id)}
-                  ></i>
-                </div>
-              ))}
+              {folder.show && (
+                <>
+                  {folder.children.map((file) => (
+                    <div
+                      style={{ display: "flex", alignItems: "baseline" }}
+                      key={file.id}
+                    >
+                      <li>
+                        {fileIcon[file.name.split(".")[1].toLowerCase()] ??
+                          null}
+                        {" " + file.name}
+                      </li>
+                      <i
+                        className="fa fa-trash icon"
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => handelDeleteFile(file.id, folder.id)}
+                      ></i>
+                    </div>
+                  ))}
+                </>
+              )}
             </ul>
 
             {idInput === folder.id ? (
