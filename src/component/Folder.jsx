@@ -69,6 +69,18 @@ export function Folder({ files, setFiles }) {
     }
   }
 
+  //function delete subFile
+  function handelDeleteFile(iD, idFolder) {
+    const f = files.map((item) => {
+      if (item.id === idFolder) {
+        item.children = item.children.filter((i) => i.id !== iD);
+      }
+      return item;
+    });
+    console.log(f);
+    setFiles([...files]);
+  }
+
   return (
     <>
       <button onClick={handelFolder}>
@@ -82,11 +94,21 @@ export function Folder({ files, setFiles }) {
               {" " + folder.name}
             </li>
             <ul>
-              {folder.children.map((item) => (
-                <li>
-                  {fileIcon[item.name.split(".")[1].toLowerCase()] ?? null}
-                  {" " + item.name}
-                </li>
+              {folder.children.map((file) => (
+                <div
+                  style={{ display: "flex", alignItems: "baseline" }}
+                  key={file.id}
+                >
+                  <li>
+                    {fileIcon[file.name.split(".")[1].toLowerCase()] ?? null}
+                    {" " + file.name}
+                  </li>
+                  <i
+                    className="fa fa-trash icon"
+                    style={{ marginLeft: "10px" }}
+                    onClick={() => handelDeleteFile(file.id, folder.id)}
+                  ></i>
+                </div>
               ))}
             </ul>
 

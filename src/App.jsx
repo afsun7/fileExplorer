@@ -6,7 +6,6 @@ import { Folder } from "./component/Folder";
 function App() {
   const [files, setFiles] = useState([]);
 
-  console.log(files);
   return (
     <>
  
